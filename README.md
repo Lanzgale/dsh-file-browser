@@ -2,7 +2,7 @@
 
 > **File Browser for DeepSeek Harness** — right-side resizable file tree with Markdown rendering, syntax highlighting, and in-panel editing. Install: `dsh plugin --profile web add dsh-file-browser`.
 
-DeepSeek Harness 的全局文件浏览器插件：在**右侧边栏**里画一棵文件树，单击文本文件即时预览、可直接编辑。侧边栏本身（列的开合、标题行、右上角按钮、深浅配色）由接口插件 `dsh-sidebar-right` 提供；本插件只负责树和预览这两块内容。
+DeepSeek Harness 的全局文件浏览器插件：在**右侧边栏**里画一棵文件树，单击文本文件即时预览、可直接编辑。侧边栏本身（列的开合、标题行、右上角按钮、深浅配色）由接口插件 `dsh-rightbar-shell` 提供；本插件只负责树和预览这两块内容。
 
 > **上游**：本插件 fork 自 [joejojoking-cloud/dsh-file-explorer](https://github.com/joejojoking-cloud/dsh-file-explorer)（MIT License），已更名并深度定制（双主题、字号缩放、刷新保持展开、隐藏文件开关、内嵌预览等）。原始版权归上游作者所有。
 
