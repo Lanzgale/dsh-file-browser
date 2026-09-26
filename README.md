@@ -8,7 +8,7 @@ DeepSeek Harness 的全局文件浏览器插件：在**右侧边栏**里画一�
 
 ## 功能
 
-- 右侧面板：内容画在接口插件声明的 `rightbar.content` 座位上；开合走会话标题栏右上角的入口按钮
+- 右侧面板：本插件向外壳 `dsh-rightbar-shell` 登记一个**档位**（`ctx.rightbarShell.addMode`），内容就画在那一列里；开合走会话标题栏右上角的入口按钮
 - 标题行由接口插件绘制：左边是「图标 + 当前浏览器名」的切换按钮，右端依次是 深浅切换 / **显示隐藏文件** / **刷新** / 收起侧边栏（中间两个由本插件提供）
 - 文件树：根目录默认展开，目录点击展开/折叠（懒加载），单击文本文件立即内嵌预览，单击非文本仅选中
 - **折叠以下全部**：目录行右端有一个 `chevron-double-up` 按钮，只在该层底下确实还有展开的目录时才出现；点它把那层以下的子孙目录一次性收起（本级保持展开）
@@ -54,10 +54,10 @@ dsh plugin --profile web add <本包路径或 npm 包名>
 ## 结构
 
 - `lib/index.js` — host 半部：`fs`/`shell` 服务 + `webServer` HTTP 路由（list / read / write / open-vscode）
-- `lib/client.js` — web client 半部：`window.__ModuleLoader__` bundle，注册 `shell.overlay` 面板与 `conversation.session.header.actions` 切换按钮
+- `lib/client.js` — web client 半部：`window.__ModuleLoader__` bundle，向外壳登记 `rightbar` 档位（内容 + 工具按钮）
 - `cordis.patch.yml` — bundle 补丁，把 `file-browser` 行插入 profile 的 host 组合
 
 ## 本地开发速查
 
-- 架构速查：`~/file/dsh/notes/architecture-dsh-file-browser.md`（当前路径）
+- 架构速查：`~/file/dsh/notes/archive/插件开发/note_dsh-file-browser-architecture.md`（已归档）
 - client 改动刷新即生效；host 改动需重启 DSH
