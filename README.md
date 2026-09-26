@@ -1,16 +1,18 @@
 # dsh-file-browser
 
-> **File Browser for DeepSeek Harness** — right-side resizable file tree with Markdown rendering, syntax highlighting, in-panel editing, and a built-in light/dark theme switch. Install: `dsh plugin --profile web add dsh-file-browser`.
+> **File Browser for DeepSeek Harness** — right-side resizable file tree with Markdown rendering, syntax highlighting, and in-panel editing. Install: `dsh plugin --profile web add dsh-file-browser`.
 
-DeepSeek Harness 的全局文件浏览器插件：在任何会话的标题栏右侧提供文件夹切换按钮，点击后在页面**右侧**打开可调宽度的文件树面板；**新会话页（未选会话或空白会话）自动隐藏**，回到真实会话即恢复。
+DeepSeek Harness 的全局文件浏览器插件：在**右侧边栏**里画一棵文件树，单击文本文件即时预览、可直接编辑。侧边栏本身（列的开合、标题行、右上角按钮、深浅配色）由接口插件 `dsh-sidebar-right` 提供；本插件只负责树和预览这两块内容。
 
 > **上游**：本插件 fork 自 [joejojoking-cloud/dsh-file-explorer](https://github.com/joejojoking-cloud/dsh-file-explorer)（MIT License），已更名并深度定制（双主题、字号缩放、刷新保持展开、隐藏文件开关、内嵌预览等）。原始版权归上游作者所有。
 
 ## 功能
 
-- 右侧面板（`shell.overlay`，可开关）：左边缘拖拽调宽，双击聊天区域收回
-- 面板标题栏：「文件浏览器」+ 四个图标 —— 深色/浅色切换（太阳/月亮）、显示/隐藏隐藏文件（眼睛）、刷新、关闭
+- 右侧面板：内容画在接口插件声明的 `rightbar.content` 座位上；开合走会话标题栏右上角的入口按钮
+- 标题行由接口插件绘制：左边是「图标 + 当前浏览器名」的切换按钮，右端依次是 深浅切换 / **显示隐藏文件** / **刷新** / 收起侧边栏（中间两个由本插件提供）
 - 文件树：根目录默认展开，目录点击展开/折叠（懒加载），单击文本文件立即内嵌预览，单击非文本仅选中
+- **折叠以下全部**：目录行右端有一个 `chevron-double-up` 按钮，只在该层底下确实还有展开的目录时才出现；点它把那层以下的子孙目录一次性收起（本级保持展开）
+- 图标一律取自 Material Design Icons（mdi）的 24×24 路径，随主题文字色自动适配
 - 预览：`.md` 渲染 Markdown（标题/列表/代码块/引用/链接），代码按扩展名自动语法高亮；预览工具栏：字号缩放（60%–180%）、重新读取文件、返回文件目录
 - 超过 1 MB 的文件提示不支持预览
 - 专注浏览：**搜索功能已移除**（查找文件请交给 agent 或命令行）；目录列表与展开状态**持久化**，关网页/刷新/重启后秒回原样
