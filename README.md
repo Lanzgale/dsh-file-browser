@@ -1,6 +1,6 @@
 # dsh-file-browser
 
-> **File Browser for DeepSeek Harness** — right-side resizable file tree with Markdown rendering, syntax highlighting, and in-panel editing. Install: `dsh plugin --profile web add dsh-file-browser`.
+> **File Browser for DeepSeek Harness** — right-side resizable file tree with Markdown rendering and syntax highlighting. Install: `dsh plugin --profile web add dsh-file-browser`.
 
 DeepSeek Harness 的全局文件浏览器插件：在**右侧边栏**里画一棵文件树，单击文本文件即时预览、可直接编辑。侧边栏本身（列的开合、标题行、右上角按钮、深浅配色）由接口插件 `dsh-rightbar-shell` 提供；本插件只负责树和预览这两块内容。
 
@@ -10,7 +10,7 @@ DeepSeek Harness 的全局文件浏览器插件：在**右侧边栏**里画一�
 
 - 右侧面板：本插件向外壳 `dsh-rightbar-shell` 登记一个**档位**（`ctx.rightbarShell.addMode`，自报 `order: 1`，所以在外壳的档位菜单里排在仓库浏览器（2）上面、也是默认档位），内容就画在那一列里；开合走会话标题栏右上角的入口按钮
 - 标题行由接口插件绘制：左边是「图标 + 当前浏览器名」的切换按钮，右端依次是 深浅切换 / **显示隐藏文件** / **刷新** / 收起侧边栏（中间两个由本插件提供）
-- 文件树：根目录默认展开，目录点击展开/折叠（懒加载），单击文本文件立即内嵌预览，单击非文本仅选中
+- 文件树：根目录默认展开，目录点击展开/折叠（懒加载），单击文本文件立即内嵌预览、**再点一次同一个文件收起预览**（中间那 220ms 里来的双击会取消收起，所以双击不会闪），单击非文本仅选中
 - 排列：**文件夹在上、文件在下**，两组各自按名称升序；名称分两档——数字/英文按 A→Z（数字按数值比，`2` 在 `10` 前），中文名整档排在后面、档内按拼音
 - **折叠以下全部**：目录行右端有一个 `chevron-double-up` 按钮，只在该层底下确实还有展开的目录时才出现；点它把那层以下的子孙目录一次性收起（本级保持展开）
 - 图标一律取自 Material Design Icons（mdi）的 24×24 路径，随主题文字色自动适配
@@ -59,9 +59,17 @@ dsh plugin --profile web add <本包路径或 npm 包名>
 
 ## 结构
 
-- `lib/index.js` — host 半部：`fs`/`shell` 服务 + `webServer` HTTP 路由（list / read / write / open-vscode）
-- `lib/client.js` — web client 半部：`window.__ModuleLoader__` bundle，向外壳登记 `rightbar` 档位（内容 + 工具按钮）
+- `lib/index.js` — host 半部：`fs`/`shell` 服务 + `webServer` HTTP 路由（`list` / `read` / `write` / `open-vscode` / **`events`**——SSE 变更流，供「AI 改文件自动刷新」用）
+- `lib/client.js` — web client 半部：`window.__ModuleLoader__` bundle，向外壳登记 `rightbar` 档位（内容 + 工具按钮），并镜像外壳的全屏状态
 - `cordis.patch.yml` — bundle 补丁，把 `file-browser` 行插入 profile 的 host 组合
+
+## 已知缺口
+
+写在这里是为了别把"没做"记成"做了"：
+
+- **面板内编辑没接线**：host 的 `write` 路由在、客户端也有一个 textarea 分支，但没有任何入口能进入编辑态（`openFile` 的 `startEditing` 永远传 `false`）。单击是预览、再单击是收起，都不是编辑。
+- **行号定位没做**：对话里点「文件:行号」时外壳会把 `line` 一并转过来（`dsh:sidebar-right:open` 的载荷里有），但预览只用了 `path`，不会跳到那一行。
+- **PDF 不能预览**：非文本文件一律只选中、不读取。
 
 ## 本地开发速查
 
