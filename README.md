@@ -72,7 +72,7 @@ dsh plugin --profile web add <本包路径或 npm 包名>
 
 ## 结构
 
-- `lib/index.js` — host 半部：`fs`/`shell` 服务 + `webServer` HTTP 路由（`list` / `read`（带回内容版本号）/ `write`（**乐观锁**：必须带版本号，过期回 409 `stale`，`force` 才允许覆盖，>1 MB 拒绝）/ `open-vscode` / **`events`**——SSE 变更流，供「AI 改文件自动刷新」用）
+- `lib/index.js` — host 半部：`fs`/`shell` 服务 + `webServer` HTTP 路由（`list` / `read`（带回内容版本号）/ `write`（**乐观锁**——读的时候记下这一版内容的"指纹"，写的时候把指纹交回来，对不上就拒收，也就是"不锁文件、撞上才拒绝"：必须带版本号，过期回 409 `stale`，`force` 才允许覆盖，>1 MB 拒绝）/ `open-vscode` / **`events`**——SSE 变更流，供「AI 改文件自动刷新」用）
 - `lib/client.js` — web client 半部：`window.__ModuleLoader__` bundle，向外壳登记 `rightbar` 档位（内容 + 工具按钮），并镜像外壳的全屏状态
 - `cordis.patch.yml` — bundle 补丁，把 `file-browser` 行插入 profile 的 host 组合
 
